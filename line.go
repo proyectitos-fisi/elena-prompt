@@ -835,17 +835,9 @@ mainLoop:
 			case 0, 28, 29, 30, 31:
 				s.doBeep()
 			default:
-				if pos == len(line) && !s.multiLineMode &&
-					len(p)+len(line) < s.columns*4 && // Avoid countGlyphs on large lines
-					countGlyphs(p)+countGlyphs(line) < s.columns-1 {
-					line = append(line, v)
-					fmt.Printf("%c", v)
-					pos++
-				} else {
-					line = append(line[:pos], append([]rune{v}, line[pos:]...)...)
-					pos++
-					s.needRefresh = true
-				}
+				line = append(line[:pos], append([]rune{v}, line[pos:]...)...)
+				pos++
+				s.needRefresh = true
 			}
 		case action:
 			switch v {

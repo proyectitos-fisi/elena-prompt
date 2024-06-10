@@ -28,6 +28,7 @@ type State struct {
 	winch       chan os.Signal
 	pending     []rune
 	useCHA      bool
+	proxy       ProxyFunc
 }
 
 // NewLiner initializes a new *State, and sets the terminal into raw mode. To

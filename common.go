@@ -182,6 +182,10 @@ func (s *State) getHistoryByPattern(pattern string) (ph []string, pos []int) {
 // to the completer which may return {"Hello, world", "Hello, Word"} to have "Hello, world!!!".
 type Completer func(line string) []string
 
+// ProxyFunc receives the current line input and cursor position, and returns
+// the line input to be displayed. Cursor position can't be modified by the proxy.
+type ProxyFunc func(input []rune, pos int) []rune
+
 // WordCompleter takes the currently edited line with the cursor position and
 // returns the completion candidates for the partial word to be completed.
 // If the line is "Hello, wo!!!" and the cursor is before the first '!', ("Hello, wo!!!", 9) is passed
@@ -248,6 +252,13 @@ func (s *State) SetShouldRestart(f ShouldRestart) {
 // ASCII BEL, 0x07). Default is true (will beep).
 func (s *State) SetBeep(beep bool) {
 	s.noBeep = !beep
+}
+
+// SetProxy defines a proxy function that will be called on every line refresh.
+// ProxyFunc receives the current line input and cursor position, and returns
+// the line input to be displayed. Cursor position can't be modified by the proxy.
+func (s *State) SetProxy(proxy ProxyFunc) {
+	s.proxy = proxy
 }
 
 func (s *State) promptUnsupported(p string) (string, error) {

@@ -99,6 +99,8 @@ func (s *State) refresh(prompt []rune, buf []rune, pos int) error {
 		return ErrInternal
 	}
 
+	buf = s.proxy(buf, pos)
+
 	s.needRefresh = false
 	if s.multiLineMode {
 		return s.refreshMultiLine(prompt, buf, pos)

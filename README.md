@@ -65,7 +65,7 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/peterh/liner"
+	"github.com/proyectitos-fisi/elena-prompt"
 )
 
 var (
@@ -111,4 +111,4 @@ func main() {
 }
 ```
 
-For documentation, see http://godoc.org/github.com/peterh/liner
+For documentation, see http://godoc.org/github.com/proyectitos-fisi/elena-prompt

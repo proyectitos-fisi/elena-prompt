@@ -93,13 +93,6 @@ func getPrefixGlyphs(s []rune, num int) []rune {
 func getSuffixGlyphs(s []rune, num int) []rune {
 	p := len(s)
 	for n := 0; n < num && p > 0; p-- {
-		if s[p] == 0x1b {
-			// skip ANSI escape sequences
-			for ; p < len(s) && s[p] != 'm'; p++ {
-			}
-			continue
-		}
-
 		// speed up the common case
 		if s[p-1] < 127 {
 			n++

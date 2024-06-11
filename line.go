@@ -153,6 +153,7 @@ func (s *State) refreshSingleLine(prompt []rune, buf []rune, pos int) error {
 			end--
 		}
 		startRune := len(getPrefixGlyphs(buf, start))
+		// NOTE: this will clear the colors D:
 		line := getPrefixGlyphs(buf[startRune:], end-start)
 
 		// Output

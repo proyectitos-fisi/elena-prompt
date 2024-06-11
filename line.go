@@ -115,6 +115,9 @@ func (s *State) refreshSingleLine(prompt []rune, buf []rune, pos int) error {
 		return err
 	}
 
+	rawBuf := buf
+	buf = CleanColors(buf)
+
 	pLen := countGlyphs(prompt)
 	bLen := countGlyphs(buf)
 	// on some OS / terminals extra column is needed to place the cursor char
@@ -123,7 +126,7 @@ func (s *State) refreshSingleLine(prompt []rune, buf []rune, pos int) error {
 	}
 	pos = countGlyphs(buf[:pos])
 	if pLen+bLen < s.columns {
-		_, err = fmt.Print(string(buf))
+		_, err = fmt.Print(string(rawBuf))
 		s.eraseLine()
 		s.cursorPos(pLen + pos)
 	} else {
@@ -178,6 +181,8 @@ func (s *State) refreshMultiLine(prompt []rune, buf []rune, pos int) error {
 
 	// it looks like Multiline mode always assume that a cursor need an extra column,
 	// and always emit a newline if we are at the screen end, so no worarounds needed there
+	rawBuf := buf
+	buf = CleanColors(buf)
 
 	totalRows := (totalColumns + s.columns - 1) / s.columns
 	maxRows := s.maxRows
@@ -210,7 +215,7 @@ func (s *State) refreshMultiLine(prompt []rune, buf []rune, pos int) error {
 	if _, err := fmt.Print(string(prompt)); err != nil {
 		return err
 	}
-	if _, err := fmt.Print(string(buf)); err != nil {
+	if _, err := fmt.Print(string(rawBuf)); err != nil {
 		return err
 	}
 

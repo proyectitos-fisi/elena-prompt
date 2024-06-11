@@ -1,6 +1,7 @@
 package liner
 
 import (
+	"regexp"
 	"unicode"
 
 	"github.com/mattn/go-runewidth"
@@ -17,11 +18,17 @@ var zeroWidth = []*unicode.RangeTable{
 	unicode.Cf,
 }
 
+var bashColorsControlMatcher = regexp.MustCompile(
+	`\x1b\[[0-9;]*[a-zA-Z]`,
+)
+
 // countGlyphs considers zero-width characters to be zero glyphs wide,
 // and members of Chinese, Japanese, and Korean scripts to be 2 glyphs wide.
 func countGlyphs(s []rune) int {
+	clean := bashColorsControlMatcher.ReplaceAllString(string(s), "")
+
 	n := 0
-	for _, r := range s {
+	for _, r := range clean {
 		// speed up the common case
 		if r < 127 {
 			n++
@@ -34,8 +41,10 @@ func countGlyphs(s []rune) int {
 }
 
 func countMultiLineGlyphs(s []rune, columns int, start int) int {
+	clean := bashColorsControlMatcher.ReplaceAllString(string(s), "")
+
 	n := start
-	for _, r := range s {
+	for _, r := range clean {
 		if r < 127 {
 			n++
 			continue
